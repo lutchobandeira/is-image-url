@@ -1,5 +1,5 @@
 import request from 'sync-request';
-import url from 'parse';
+import url from 'url';
 import isImage from 'is-image';
 import isUrl from 'is-url';
 
