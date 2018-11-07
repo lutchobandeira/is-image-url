@@ -1,14 +1,14 @@
-import request from 'sync-request';
-import url from 'url';
-import isImage from 'is-image';
-import isUrl from 'is-url';
+const request = require('sync-request');
+const urlParse = require('url').parse;
+const isImage = require('is-image');
+const isUrl = require('is-url');
 
 export default (url, accurate, timeout) => {
   if (!url) return false;
   const http = url.lastIndexOf('http');
   if (http != -1) url = url.substring(http);
   if (!isUrl(url)) return isImage(url);
-  let pathname = url.parse(url).pathname;
+  let pathname = urlParse(url).pathname;
   if (!pathname) return false;
   const last = pathname.search(/[:?&]/);
   if (last != -1) pathname = pathname.substring(0, last);
