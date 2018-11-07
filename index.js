@@ -1,27 +1,32 @@
-const request = require('sync-request');
-const urlParse = require('url').parse;
-const isImage = require('is-image');
-const isUrl = require('is-url');
+'use strict';
 
-export default (url, accurate, timeout) => {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var request = require('sync-request');
+var urlParse = require('url').parse;
+var isImage = require('is-image');
+var isUrl = require('is-url');
+
+exports.default = function (url, accurate, timeout) {
   if (!url) return false;
-  const http = url.lastIndexOf('http');
+  var http = url.lastIndexOf('http');
   if (http != -1) url = url.substring(http);
   if (!isUrl(url)) return isImage(url);
-  let pathname = urlParse(url).pathname;
+  var pathname = urlParse(url).pathname;
   if (!pathname) return false;
-  const last = pathname.search(/[:?&]/);
+  var last = pathname.search(/[:?&]/);
   if (last != -1) pathname = pathname.substring(0, last);
   if (isImage(pathname)) return true;
   if (/styles/i.test(pathname)) return false;
   try {
     if (!accurate) return false;
     if (!timeout) timeout = 60000;
-    const res = request('GET', url, { timeout });
+    var res = request('GET', url, { timeout: timeout });
     if (!res) return false;
-    const headers = res.headers;
+    var headers = res.headers;
     if (!headers) return false;
-    const contentType = headers['content-type'];
+    var contentType = headers['content-type'];
     if (!contentType) return false;
     return contentType.search(/^image\//) != -1;
   } catch (e) {
